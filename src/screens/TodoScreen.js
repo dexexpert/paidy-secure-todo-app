@@ -10,6 +10,9 @@ export default function TodoScreen() {
   
   const handleAddTask = () => {
      Keyboard.dismiss();
+     if (!task || task.trim() === '') {
+       return; // Don't add empty tasks
+     }
      if (editingIndex !== null) {
        // Update existing task
        let itemsCopy = [...taskItems];
