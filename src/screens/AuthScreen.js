@@ -1,5 +1,4 @@
 import {View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-const myImage = require('../../assets/icon.png');
 
 export default function Auth({onAuthenticate}) {
     return(

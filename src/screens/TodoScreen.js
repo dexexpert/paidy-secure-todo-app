@@ -1,20 +1,36 @@
 import React, {useState} from 'react';
 import { Platform, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Keyboard} from 'react-native';
 import Task from '../components/Task';
+import { COLORS } from '../../assets/colors';
 
 export default function TodoScreen() {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
   
   const handleAddTask = () => {
-     // Logic for adding a task
      Keyboard.dismiss();
-     setTaskItems([...taskItems, task]);
+     if (editingIndex !== null) {
+       // Update existing task
+       let itemsCopy = [...taskItems];
+       itemsCopy[editingIndex] = task;
+       setTaskItems(itemsCopy);
+       setEditingIndex(null);
+     } else {
+       // Add new task
+       setTaskItems([...taskItems, task]);
+     }
      setTask(null);
   }
 
-  const completeTask = (index) => {
-    // Logic for completing a task
+  const updateTask = (index) => {
+    // Set task for editing
+    setTask(taskItems[index]);
+    setEditingIndex(index);
+  }
+
+  const removeTask = (index) => {
+    // Logic for removing a task
     let itemsCopy = [...taskItems];
     itemsCopy.splice(index, 1);
     setTaskItems(itemsCopy);
@@ -29,9 +45,12 @@ export default function TodoScreen() {
           {/* This is where the tasks will go */}
           {taskItems.map((item, index) => {
             return (
-              <TouchableOpacity key={index} onPress={() => completeTask(index)}>
-                <Task key={index} text={item} />
-              </TouchableOpacity>
+              <Task 
+                key={index} 
+                text={item} 
+                onUpdate={() => updateTask(index)}
+                onRemove={() => removeTask(index)}
+              />
             )
           })}
         </View>
@@ -44,7 +63,7 @@ export default function TodoScreen() {
         <TextInput style={styles.input} placeholder={'Enter here'} value={task} onChangeText={text => setTask(text)}/>
         <TouchableOpacity onPress={handleAddTask}>
           <View style={styles.addWrapper}>
-            <Text style={styles.addText}>+</Text>
+            <Text style={styles.addText}>{editingIndex !== null ? 'Update' : 'Add'}</Text>
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -57,7 +76,7 @@ export default function TodoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8EAED',
+    backgroundColor: COLORS.backgroundLight,
   },
   tasksWrapper: {
     paddingTop: 80,
@@ -82,26 +101,27 @@ const styles = StyleSheet.create({
   input: {
     paddingVertical: 15,
     paddingHorizontal: 15,
-    backgroundColor: '#FFF',
+    backgroundColor: COLORS.white,
     borderRadius: 60,
     width: '70%',
     height: 50,
     fontSize: 18,
     borderWidth: 1,
-    borderColor: '#E8EAED',
+    borderColor: COLORS.backgroundLight,
   },
   addWrapper:{
-    width: 60,
+    width: 80,
     height: 60,
-    borderRadius: 60,
-    backgroundColor: '#FFF',
+    borderRadius: 20,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E8EAED',
+    borderColor: COLORS.backgroundLight,
   },
   addText:{
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: COLORS.textWhite,
   }
 });

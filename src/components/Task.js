@@ -1,22 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { COLORS } from '../../assets/colors';
 
 const Task = (props) => {
 
     return (
-        <View style={styles.item}>
-            <View style={styles.itemLeft}>
-                <TouchableOpacity style={styles.square}></TouchableOpacity>
-                <Text style={styles.itemText}>{props.text}</Text>
+        <TouchableOpacity onPress={props.onUpdate}>
+            <View style={styles.item}>
+                <View style={styles.itemLeft}>
+                    <TouchableOpacity style={styles.square}></TouchableOpacity>
+                    <Text style={styles.itemText}>{props.text}</Text>
+                </View>
+                <TouchableOpacity 
+                    style={styles.removeButton}
+                    onPress={props.onRemove}
+                >
+                    <Text style={styles.removeText}>✕</Text>
+                </TouchableOpacity>
             </View>
-            <View style={styles.circular}></View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     item: {
-        backgroundColor: '#FFF',
+        backgroundColor: COLORS.taskBackground,
         padding: 15,
         borderRadius: 20,
         flexDirection: 'row',
@@ -28,24 +36,32 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         flexWrap: 'wrap',
+        flex: 1,
     },
     square: {
         width: 24,
         height: 24,
-        backgroundColor: '#0e5a86',
+        backgroundColor: COLORS.primary,
         opacity: 0.4,
         borderRadius: 20,
         marginRight: 15,
     },
-    text: {
+    itemText: {
         maxWidth: '80%',
     },
-    circular: {
-        width: 12,
-        height: 12,
-        borderColor: '#0e5a86',
-        borderWidth: 2,
-        borderRadius: 5,
+    removeButton: {
+        width: 30,
+        height: 30,
+        backgroundColor: COLORS.removeButton,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 10,
+    },
+    removeText: {
+        color: COLORS.textWhite,
+        fontSize: 16,
+        fontWeight: 'bold',
     }
 });
 
