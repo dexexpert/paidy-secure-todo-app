@@ -11,11 +11,19 @@ export default function App() {
   // Check if hardware supports biometrics
 
   useEffect(() => {
+    let isMounted = true;
+    
     (async () => {
       const compatible = await LocalAuthentication.hasHardwareAsync();
-      setIsBiometricSupported(compatible);
+      if (isMounted) {
+        setIsBiometricSupported(compatible);
+      }
     })();
-  });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   /**
   * Requests biometric authentication.
